@@ -35,6 +35,30 @@ npm run dev
 > Бэкенд хранит данные в памяти: после перезапуска сервиса бронирования и
 > созданные типы событий сбрасываются в демонстрационные.
 
+## Интеграционные тесты (Playwright)
+
+Тесты в `e2e/` проверяют основной пользовательский сценарий бронирования в
+реальном браузере (фронтенд + бэкенд), а также ключевое бизнес-правило
+«занятый слот нельзя забронировать дважды».
+
+```bash
+cd e2e
+npm install
+npx playwright install chromium   # один раз
+npm test                          # Playwright сам поднимает server и web
+```
+
+В CI (`.github/workflows/e2e.yml`) тесты запускаются на каждый push/PR, отчёт
+сохраняется артефактом при падении. Подробнее — в `e2e/README.md`.
+
+## Релизы и changelog
+
+- Коммиты пишутся по **Conventional Commits** — см. `CONTRIBUTING.md`.
+- **release-please** (`.github/workflows/release-please.yml`) анализирует
+  коммиты в `main` и автоматически создаёт/обновляет release-PR: формирует
+  CHANGELOG и предлагает новую версию по семантическому версионированию.
+  После мёржа release-PR тег и релиз создаются автоматически.
+
 ## Status
 
 [![Actions Status](https://github.com/FoxxMGR/fullstack-javascript-project-386/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/FoxxMGR/fullstack-javascript-project-386/actions)
