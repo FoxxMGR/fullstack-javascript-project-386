@@ -4,8 +4,12 @@ import { seedStore, store } from './store.ts';
 
 /**
  * Точка входа бэкенда.
- * Запуск: npm start (или node src/server.ts). Порт по умолчанию — 8080,
- * как ожидает Vite-прокси фронтенда (web/vite.config.ts).
+ * Запуск: npm start (или node src/server.ts).
+ * Порт берётся из переменной окружения PORT (требование деплоя: Render/Railway
+ * подставляют свой порт), по умолчанию — 8080, как ожидает Vite-прокси
+ * фронтенда (web/vite.config.ts).
+ * Вместе с API процесс раздаёт статику собранного фронтенда (web/dist),
+ * поэтому один контейнер (см. Dockerfile) обслуживает всё приложение.
  */
 
 const PORT = Number(process.env.PORT ?? 8080);

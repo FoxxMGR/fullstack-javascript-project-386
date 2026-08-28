@@ -18,6 +18,7 @@ import {
   type Store,
 } from './store.ts';
 import type { Booking, SuccessResult } from './types.ts';
+import { serveStatic } from './static.ts';
 import {
   MAX_BODY_BYTES,
   validateBookingRequest,
@@ -321,6 +322,17 @@ export function createApp(st: Store) {
         }
         const body = route.method === 'GET' || route.method === 'DELETE' ? undefined : await readJsonBody(req);
         await route.handler({ req, res, params, query: url.searchParams, body });
+        return;
+      }
+
+      // Вне контрактных префиксов (/guest, /admin, /health) раздаём статику
+      // собранного фронтенда — так API и SPA живут в одном процессе/образе.
+      // Неизвестные API-пути по-прежнему получают JSON 404 (ValidationError).
+      const isApiPath =
+        url.pathname.startsWith('/guest') ||
+        url.pathname.startsWith('/admin') ||
+        url.pathname === '/health';
+      if (!isApiPath && (method === 'GET' || method === 'HEAD') && serveStatic(res, url.pathname)) {
         return;
       }
 
