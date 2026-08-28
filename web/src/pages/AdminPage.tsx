@@ -18,7 +18,6 @@ export default function AdminPage() {
   const [types, setTypes] = useState<EventType[]>([]);
   const [loadingTypes, setLoadingTypes] = useState(false);
   const [form, setForm] = useState<CreateEventTypeRequest>(EMPTY_FORM);
-  const [editId, setEditId] = useState<string | null>(null);
   const [typesError, setTypesError] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -66,44 +65,13 @@ export default function AdminPage() {
     setSaving(true);
     setFormError(null);
     try {
-      if (editId) {
-        await adminApi.updateEventType(editId, form);
-      } else {
-        await adminApi.createEventType(form);
-      }
+      await adminApi.createEventType(form);
       setForm(EMPTY_FORM);
-      setEditId(null);
       await loadTypes();
     } catch (e) {
       setFormError(e instanceof ApiError ? e.message : 'Не удалось сохранить тип события');
     } finally {
       setSaving(false);
-    }
-  };
-
-  const startEdit = (t: EventType) => {
-    setEditId(t.id);
-    setForm({
-      title: t.title,
-      description: t.description ?? '',
-      durationMinutes: t.durationMinutes,
-    });
-  };
-
-  const cancelEdit = () => {
-    setEditId(null);
-    setForm(EMPTY_FORM);
-  };
-
-  const removeType = async (id: string) => {
-    if (!window.confirm('Удалить тип события? Связанные бронирования могут быть затронуты.')) {
-      return;
-    }
-    try {
-      await adminApi.deleteEventType(id);
-      await loadTypes();
-    } catch (e) {
-      setTypesError(e instanceof ApiError ? e.message : 'Не удалось удалить тип события');
     }
   };
 
@@ -141,9 +109,9 @@ export default function AdminPage() {
 
       {tab === 'types' && (
         <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-          {/* Форма создания/редактирования типа события */}
+          {/* Форма создания типа события */}
           <div>
-            <h3>{editId ? 'Редактировать тип события' : 'Создать тип события'}</h3>
+            <h3>Создать тип события</h3>
             <div className="card">
               {formError && <div className="err">{formError}</div>}
               <div className="field">
@@ -184,13 +152,8 @@ export default function AdminPage() {
                   disabled={saving || !form.title.trim()}
                   onClick={() => void submitForm()}
                 >
-                  {saving ? 'Сохранение…' : editId ? 'Сохранить' : 'Создать'}
+                  {saving ? 'Создание…' : 'Создать'}
                 </button>
-                {editId && (
-                  <button className="btn" onClick={cancelEdit}>
-                    Отмена
-                  </button>
-                )}
               </div>
             </div>
           </div>
@@ -206,20 +169,10 @@ export default function AdminPage() {
             ) : (
               types.map((t) => (
                 <div className="card" key={t.id}>
-                  <div className="row" style={{ justifyContent: 'space-between' }}>
-                    <div>
-                      <h3 style={{ margin: 0 }}>{t.title}</h3>
-                      {t.description && <p className="muted">{t.description}</p>}
-                      <span className="muted">{t.durationMinutes} мин</span>
-                    </div>
-                    <div className="row">
-                      <button className="btn" onClick={() => startEdit(t)}>
-                        Изменить
-                      </button>
-                      <button className="btn danger" onClick={() => void removeType(t.id)}>
-                        Удалить
-                      </button>
-                    </div>
+                  <div>
+                    <h3 style={{ margin: 0 }}>{t.title}</h3>
+                    {t.description && <p className="muted">{t.description}</p>}
+                    <span className="muted">{t.durationMinutes} мин</span>
                   </div>
                 </div>
               ))

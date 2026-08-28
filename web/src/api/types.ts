@@ -14,12 +14,6 @@ export interface CreateEventTypeRequest {
   durationMinutes: number;
 }
 
-export interface UpdateEventTypeRequest {
-  title?: string;
-  description?: string;
-  durationMinutes?: number;
-}
-
 export interface TimeSlot {
   startTime: string;
   endTime: string;

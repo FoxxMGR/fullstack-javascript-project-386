@@ -5,7 +5,6 @@ import type {
   EventType,
   SuccessResult,
   TimeSlot,
-  UpdateEventTypeRequest,
   ValidationError,
 } from './types';
 
@@ -111,33 +110,12 @@ export const adminApi = {
   listEventTypes: async (): Promise<EventType[]> =>
     request<EventType[]>('/admin/event-types'),
 
-  getEventType: async (id: string): Promise<EventType> =>
-    unwrap(await request<EventType | ValidationError>(`/admin/event-types/${id}`)),
-
-  updateEventType: async (id: string, updates: UpdateEventTypeRequest): Promise<EventType> =>
-    unwrap(
-      await request<EventType | ValidationError>(`/admin/event-types/${id}`, {
-        method: 'PATCH',
-        body: JSON.stringify(updates),
-      }),
-    ),
-
-  deleteEventType: async (id: string): Promise<SuccessResult> =>
-    unwrap(
-      await request<SuccessResult | ValidationError>(`/admin/event-types/${id}`, {
-        method: 'DELETE',
-      }),
-    ),
-
   listBookings: async (status?: 'upcoming' | 'past'): Promise<Booking[]> => {
     const params = new URLSearchParams();
     if (status) params.set('status', status);
     const qs = params.toString();
     return request<Booking[]>(`/admin/bookings${qs ? `?${qs}` : ''}`);
   },
-
-  getBooking: async (id: string): Promise<Booking> =>
-    unwrap(await request<Booking | ValidationError>(`/admin/bookings/${id}`)),
 
   cancelBooking: async (id: string): Promise<SuccessResult> =>
     unwrap(

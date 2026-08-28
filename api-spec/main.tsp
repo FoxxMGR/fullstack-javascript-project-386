@@ -39,20 +39,6 @@ model CreateEventTypeRequest {
   durationMinutes: int32;
 }
 
-/** Данные для обновления типа события (все поля необязательны) */
-model UpdateEventTypeRequest {
-  @minLength(1)
-  @maxLength(100)
-  title?: string;
-
-  @maxLength(500)
-  description?: string;
-
-  @minValue(5)
-  @maxValue(480)
-  durationMinutes?: int32;
-}
-
 /** Слот времени для бронирования */
 model TimeSlot {
   startTime: string; // ISO 8601: "2024-01-15T10:00:00Z"
@@ -152,24 +138,6 @@ namespace CalendarBookingService {
     @get
     op listEventTypesAdmin(): EventType[];
 
-    /** Получить тип события по ID */
-    @route("/event-types/{id}")
-    @get
-    op getEventType(@path id: string): EventType | ValidationError;
-
-    /** Обновить тип события */
-    @route("/event-types/{id}")
-    @patch
-    op updateEventType(
-      @path id: string,
-      @body updates: UpdateEventTypeRequest
-    ): EventType | ValidationError;
-
-    /** Удалить тип события */
-    @route("/event-types/{id}")
-    @delete
-    op deleteEventType(@path id: string): SuccessResult | ValidationError;
-
     /** Получить все бронирования (предстоящие встречи) */
     @route("/bookings")
     @get
@@ -178,11 +146,6 @@ namespace CalendarBookingService {
       @query to?: string,
       @query status?: "upcoming" | "past"
     ): Booking[];
-
-    /** Получить конкретное бронирование */
-    @route("/bookings/{id}")
-    @get
-    op getBooking(@path id: string): Booking | ValidationError;
 
     /** Отменить бронирование */
     @route("/bookings/{id}")
