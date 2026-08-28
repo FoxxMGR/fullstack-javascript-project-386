@@ -62,7 +62,12 @@ curl http://localhost:3000/health   # {"status":"ok"}
 health-check `/health`, автодеплой из `main`. Render сам подставляет PORT,
 поэтому никакой дополнительной конфигурации не требуется.
 
-**Опубликованное приложение:** <!-- DEPLOY_URL -->—<!-- /DEPLOY_URL -->
+**Опубликованное приложение: [https://fullstack-javascript-project-386.onrender.com](https://fullstack-javascript-project-386.onrender.com)** —
+деплой через Render (Docker-образ из этого репозитория, план free, health-check
+`/health`). Сервис: `fullstack-javascript-project-386`
+([dashboard](https://dashboard.render.com/web/srv-da8ocn0ae00c73dh7r1g)).
+На free-плане сервис «засыпает» без трафика: первый запрос может просыпаться
+до ~60 секунд. Данные в памяти — при перезапуске сбрасываются в демо.
 
 ## Интеграционные тесты (Playwright)
 
