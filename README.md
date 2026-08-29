@@ -88,30 +88,16 @@ npm test                          # Playwright сам поднимает server 
 ## Релизы и changelog
 
 - Коммиты пишутся по **Conventional Commits** — см. `CONTRIBUTING.md`.
-- **release-please** (`.github/workflows/release-please.yml`) анализирует
-  коммиты в `main` и автоматически создаёт/обновляет release-PR: формирует
-  CHANGELOG и предлагает новую версию по семантическому версионированию.
-  После мёржа release-PR тег и релиз создаются автоматически.
-
-### Настройка релизного воркфлоу (один раз)
-
-GitHub по умолчанию запрещает `GITHUB_TOKEN` создавать pull request'ы — без
-дополнительной настройки воркфлоу падает с ошибкой «GitHub Actions is not
-permitted to create or approve pull requests». Нужно одно из двух:
-
-1. **Настройка репозитория (рекомендуется).** Settings → Actions → General →
-   раздел **Workflow permissions** → включить
-   ✅ **Allow GitHub Actions to create and approve pull requests** → Save.
-   Затем перезапустить упавший job: Actions → release-please → ⋯ →
-   Re-run failed jobs (release-ветка уже создана, PR откроется при
-   перезапуске).
-2. **Персональный токен.** Создать classic PAT со scope `repo` (или
-   fine-grained с правами *Contents: Read and write* и *Pull requests:
-   Read and write*) и добавить его как секрет `RELEASE_PAT`
-   (Settings → Secrets and variables → Actions → New repository secret).
-   Такой токен не подчиняется указанной настройке. Воркфлоу использует
-   `secrets.RELEASE_PAT || secrets.GITHUB_TOKEN`, поэтому без секрета
-   продолжит работать через `GITHUB_TOKEN`.
+- **release-it** (`.github/workflows/release.yml`) запускается на каждый push
+  в `main`: если среди новых коммитов есть `feat`/`fix`/`perf`/`revert` или
+  breaking-изменения, автоматически публикуется релиз — версия поднимается
+  по semver, обновляется `CHANGELOG.md`, ставится тег `vX.Y.Z`, создаётся
+  GitHub Release, а коммит `chore(release): vX.Y.Z` пушится в `main`
+  (с пометкой `[skip ci]`).
+- Прочие типы коммитов (`docs`, `ci`, `chore`, `test`, `build`, `style`,
+  `refactor`) релиз не создают — воркфлоу завершается без действий.
+- Дополнительные настройки не нужны: используется стандартный `GITHUB_TOKEN`
+  с правом `contents: write` (pull request'ы воркфлоу не создаёт).
 
 ## Status
 
