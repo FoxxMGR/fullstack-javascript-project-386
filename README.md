@@ -102,3 +102,6 @@ npm test                          # Playwright сам поднимает server 
 ## Status
 
 [![Actions Status](https://github.com/FoxxMGR/fullstack-javascript-project-386/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/FoxxMGR/fullstack-javascript-project-386/actions)
+[![e2e](https://github.com/FoxxMGR/fullstack-javascript-project-386/actions/workflows/e2e.yml/badge.svg)](https://github.com/FoxxMGR/fullstack-javascript-project-386/actions/workflows/e2e.yml)
+[![Deploy on Render](https://img.shields.io/badge/deploy-Render-46E3B8?logo=render&logoColor=white)](https://fullstack-javascript-project-386.onrender.com)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/FoxxMGR/fullstack-javascript-project-386)
